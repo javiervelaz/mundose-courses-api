@@ -75,16 +75,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality
     steps:
-      - name: Diagnóstico de secrets
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          for n in SNYK_TOKEN SONAR_TOKEN; do
-            v="${!n}"
-            if [ -n "$v" ]; then echo "$n: presente (${#v} caracteres)"; else echo "$n: VACÍO"; fi
-          done
-
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0 # Sonar necesita el historial para calcular "new code"
@@ -108,16 +98,6 @@ jobs:
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
-      - name: Diagnóstico de secrets
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          for n in SNYK_TOKEN SONAR_TOKEN; do
-            v="${!n}"
-            if [ -n "$v" ]; then echo "$n: presente (${#v} caracteres)"; else echo "$n: VACÍO"; fi
-          done
-
       - uses: actions/checkout@v7.0.1
 
       - uses: actions/setup-node@v7.1.0
@@ -318,34 +298,6 @@ jobs:
       TF_VAR_aws_region: ${{ vars.AWS_REGION }}
       TF_VAR_grafana_admin_password: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
     steps:
-      - name: Diagnóstico de variables
-        working-directory: .
-        env:
-          V_ROLE: ${{ vars.AWS_ROLE_ARN }}
-          V_BUCKET: ${{ vars.TF_STATE_BUCKET }}
-          V_REGION: ${{ vars.AWS_REGION }}
-          V_CIDR: ${{ vars.ADMIN_CIDR }}
-          S_GRAFANA: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
-        run: |
-          echo "AWS_ROLE_ARN:    ${V_ROLE:-VACÍO}"
-          echo "TF_STATE_BUCKET: ${V_BUCKET:-VACÍO}"
-          echo "AWS_REGION:      ${V_REGION:-VACÍO}"
-          echo "ADMIN_CIDR:      ${V_CIDR:-VACÍO}"
-          if [ -n "$S_GRAFANA" ]; then echo "GRAFANA_ADMIN_PASSWORD: presente (${#S_GRAFANA} caracteres)"; else echo "GRAFANA_ADMIN_PASSWORD: VACÍO"; fi
-
-      - name: Diagnóstico del token OIDC
-        working-directory: .
-        run: |
-          token=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" | python3 -c 'import sys,json; print(json.load(sys.stdin)["value"])')
-          python3 - "$token" <<'PY'
-          import sys, json, base64
-          part = sys.argv[1].split(".")[1]
-          claims = json.loads(base64.urlsafe_b64decode(part + "=" * (-len(part) % 4)))
-          for k in ("sub", "aud", "iss", "repository", "environment", "ref"):
-              print(f"{k}: {claims.get(k)}")
-          PY
-
       - uses: actions/checkout@v7.0.1
 
       - uses: aws-actions/configure-aws-credentials@v6.3.0
