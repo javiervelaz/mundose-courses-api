@@ -319,6 +319,7 @@ jobs:
       TF_VAR_grafana_admin_password: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
     steps:
       - name: Diagnóstico de variables
+        working-directory: .
         env:
           V_ROLE: ${{ vars.AWS_ROLE_ARN }}
           V_BUCKET: ${{ vars.TF_STATE_BUCKET }}
