@@ -62,7 +62,7 @@ Pull requests corren todo menos el push y el deploy. Los reportes (ESLint, Snyk,
 
 ## Infraestructura
 
-**AWS** (`infra/envs/aws`): EC2 `t3.small` Amazon Linux 2023 con Docker Compose, Elastic IP, security group (80 público; 3000 y 9090 solo `ADMIN_CIDR`; sin SSH), rol con SSM para administrar sin llaves, IMDSv2 obligatorio, disco cifrado. El despliegue es **inmutable**: el SHA forma parte del `user_data` y cada versión reemplaza la instancia; la IP no cambia. Estado en S3 con bloqueo nativo (`use_lockfile`).
+**AWS** (`infra/envs/aws`): EC2 `t3.small` Amazon Linux 2023 en una VPC propia (subred pública + Internet Gateway, sin NAT) con Docker Compose, Elastic IP, security group (80 público; 3000 y 9090 solo `ADMIN_CIDR`; sin SSH), rol con SSM para administrar sin llaves, IMDSv2 obligatorio, disco cifrado. El despliegue es **inmutable**: el SHA forma parte del `user_data` y cada versión reemplaza la instancia; la IP no cambia. Estado en S3 con bloqueo nativo (`use_lockfile`).
 
 **Local** (`infra/envs/local`): VM Ubuntu 24.04 en VirtualBox creada con Vagrant; dentro, Terraform con el provider Docker levanta los mismos cuatro contenedores con la misma configuración de `monitoring/`.
 

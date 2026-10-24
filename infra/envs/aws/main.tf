@@ -26,15 +26,11 @@ data "aws_ssm_parameter" "al2023" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
 }
 
-data "aws_vpc" "default" {
-  default = true
-}
-
 # -------------------------------------------------------------- red / firewall
 resource "aws_security_group" "app" {
   name        = "${var.project}-app"
   description = "mundose-courses-api: HTTP publico, observabilidad solo admin_cidr, sin SSH"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = aws_vpc.main.id
 }
 
 resource "aws_vpc_security_group_ingress_rule" "http" {
@@ -102,6 +98,8 @@ resource "aws_iam_instance_profile" "instance" {
 resource "aws_instance" "app" {
   ami                         = data.aws_ssm_parameter.al2023.insecure_value
   instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.public.id
+  associate_public_ip_address = true # IP temporal para el arranque; la EIP la reemplaza
   vpc_security_group_ids      = [aws_security_group.app.id]
   iam_instance_profile        = aws_iam_instance_profile.instance.name
   user_data_base64            = base64gzip(local.user_data)
@@ -132,6 +130,8 @@ resource "aws_instance" "app" {
 resource "aws_eip" "app" {
   domain   = "vpc"
   instance = aws_instance.app.id
+
+  depends_on = [aws_internet_gateway.main]
 
   tags = {
     Name = "${var.project}-app"
