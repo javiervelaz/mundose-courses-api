@@ -3,7 +3,11 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 
-const BASE = __ENV.BASE_URL || 'http://localhost:8080';
+const BASE = (__ENV.BASE_URL || 'http://localhost:8080').replace(/\/+$/, '');
+
+// 409 (ya inscripto) y 422 (curso lleno) son respuestas validas de la API: no son fallos.
+// Sin esto k6 cuenta todo 4xx como error y falsea http_req_failed.
+http.setResponseCallback(http.expectedStatuses({ min: 200, max: 399 }, 409, 422));
 const COURSES = ['devops-101', 'k8s-201', 'aws-110', 'data-150', 'node-120'];
 
 export const options = {
