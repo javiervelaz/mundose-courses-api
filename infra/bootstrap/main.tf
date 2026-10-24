@@ -86,10 +86,12 @@ data "aws_iam_policy_document" "trust" {
       values   = ["sts.amazonaws.com"]
     }
     # Solo el environment "production" de este repo (el job deploy) puede asumir el rol.
+    # GitHub emite el sub con los IDs numericos del owner y del repo, asi que un repo
+    # borrado y recreado con el mismo nombre no hereda el acceso.
     condition {
       test     = "StringEquals"
       variable = "token.actions.githubusercontent.com:sub"
-      values   = ["repo:${var.github_repository}:environment:production"]
+      values   = var.github_oidc_subjects
     }
   }
 }
