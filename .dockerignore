@@ -1,0 +1,14 @@
+node_modules
+dist
+coverage
+reports
+.git
+.github
+infra
+monitoring
+load
+docs
+*.md
+.env*
+Vagrantfile
+.vagrant

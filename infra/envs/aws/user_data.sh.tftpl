@@ -1,0 +1,48 @@
+#!/bin/bash
+# Arranque de la EC2 (cloud-init). Generado por Terraform: no editar en la instancia.
+set -euxo pipefail
+
+dnf install -y docker
+systemctl enable --now docker
+
+mkdir -p /usr/local/lib/docker/cli-plugins
+curl -fsSL "https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-linux-x86_64" \
+  -o /usr/local/lib/docker/cli-plugins/docker-compose
+chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+install -d -m 755 /opt/mundose/prometheus /opt/mundose/grafana/provisioning/datasources \
+  /opt/mundose/grafana/provisioning/dashboards /opt/mundose/grafana/dashboards
+cd /opt/mundose
+
+cat > docker-compose.yml <<'EOF_COMPOSE'
+${compose_yml}
+EOF_COMPOSE
+
+cat > prometheus/prometheus.yml <<'EOF_PROM'
+${prometheus_yml}
+EOF_PROM
+
+cat > prometheus/alerts.yml <<'EOF_ALERTS'
+${alerts_yml}
+EOF_ALERTS
+
+cat > grafana/provisioning/datasources/prometheus.yml <<'EOF_DS'
+${datasource_yml}
+EOF_DS
+
+cat > grafana/provisioning/dashboards/dashboards.yml <<'EOF_DB'
+${dashboards_yml}
+EOF_DB
+
+cat > grafana/dashboards/mundose-api.json <<'EOF_DASH'
+${dashboard_json}
+EOF_DASH
+
+umask 077
+cat > .env <<'EOF_ENV'
+APP_IMAGE=${image}:${image_tag}
+GF_SECURITY_ADMIN_PASSWORD=${grafana_admin_password}
+EOF_ENV
+
+docker compose pull
+docker compose up -d

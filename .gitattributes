@@ -1,0 +1,4 @@
+# Los scripts corren dentro de la VM Linux: siempre LF aunque se clone en Windows.
+*.sh  text eol=lf
+*.tftpl text eol=lf
+Vagrantfile text eol=lf
