@@ -318,6 +318,20 @@ jobs:
       TF_VAR_aws_region: ${{ vars.AWS_REGION }}
       TF_VAR_grafana_admin_password: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
     steps:
+      - name: Diagnóstico de variables
+        env:
+          V_ROLE: ${{ vars.AWS_ROLE_ARN }}
+          V_BUCKET: ${{ vars.TF_STATE_BUCKET }}
+          V_REGION: ${{ vars.AWS_REGION }}
+          V_CIDR: ${{ vars.ADMIN_CIDR }}
+          S_GRAFANA: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+        run: |
+          echo "AWS_ROLE_ARN:    ${V_ROLE:-VACÍO}"
+          echo "TF_STATE_BUCKET: ${V_BUCKET:-VACÍO}"
+          echo "AWS_REGION:      ${V_REGION:-VACÍO}"
+          echo "ADMIN_CIDR:      ${V_CIDR:-VACÍO}"
+          if [ -n "$S_GRAFANA" ]; then echo "GRAFANA_ADMIN_PASSWORD: presente (${#S_GRAFANA} caracteres)"; else echo "GRAFANA_ADMIN_PASSWORD: VACÍO"; fi
+
       - uses: actions/checkout@v7.0.1
 
       - uses: aws-actions/configure-aws-credentials@v6.3.0
