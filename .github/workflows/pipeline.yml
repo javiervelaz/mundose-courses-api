@@ -75,6 +75,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: quality
     steps:
+      - name: Diagnóstico de secrets
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          for n in SNYK_TOKEN SONAR_TOKEN; do
+            v="${!n}"
+            if [ -n "$v" ]; then echo "$n: presente (${#v} caracteres)"; else echo "$n: VACÍO"; fi
+          done
+
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0 # Sonar necesita el historial para calcular "new code"
@@ -98,6 +108,16 @@ jobs:
     env:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
+      - name: Diagnóstico de secrets
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          for n in SNYK_TOKEN SONAR_TOKEN; do
+            v="${!n}"
+            if [ -n "$v" ]; then echo "$n: presente (${#v} caracteres)"; else echo "$n: VACÍO"; fi
+          done
+
       - uses: actions/checkout@v7.0.1
 
       - uses: actions/setup-node@v7.1.0
