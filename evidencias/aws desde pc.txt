@@ -1,0 +1,57 @@
+PS C:\Users\javie\Documents\devops-pin\mundose-courses-api\infra\envs\aws> terraform init -reconfigure `
+>>   -backend-config="bucket=mundose-tfstate-565816413363" `
+>>   -backend-config="key=mundose/aws.tfstate" `
+>>   -backend-config="region=us-east-1" `
+>>   -backend-config="encrypt=true"
+Initializing the backend...
+
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.
+
+Initializing provider plugins...
+- Finding hashicorp/aws versions matching "~> 6.0"...
+- Installing hashicorp/aws v6.70.0...
+- Installed hashicorp/aws v6.70.0 (signed by HashiCorp)
+
+Terraform has created a lock file .terraform.lock.hcl to record the provider
+selections it made above. Include this file in your version control repository
+so that Terraform can guarantee to make the same selections by default when
+you run "terraform init" in the future.
+
+Terraform has been successfully initialized!
+
+You may now begin working with Terraform. Try running "terraform plan" to see
+any changes that are required for your infrastructure. All Terraform commands
+should now work.
+
+If you ever set or change modules or backend configuration for Terraform,
+rerun this command to reinitialize your working directory. If you forget, other
+commands will detect it and remind you to do so if necessary.
+PS C:\Users\javie\Documents\devops-pin\mundose-courses-api\infra\envs\aws> terraform output
+app_url = "http://34.226.5.17"
+deployed_image = "ghcr.io/javiervelaz/mundose-courses-api:48171eab069f5700a2cc2713938e554d96367247"
+grafana_url = "http://34.226.5.17:3000"
+instance_id = "i-0669caac896d4e7eb"
+prometheus_url = "http://34.226.5.17:9090"
+PS C:\Users\javie\Documents\devops-pin\mundose-courses-api\infra\envs\aws> terraform state list
+data.aws_availability_zones.available
+data.aws_iam_policy_document.ec2_assume
+data.aws_ssm_parameter.al2023
+aws_default_security_group.default
+aws_eip.app
+aws_iam_instance_profile.instance
+aws_iam_role.instance
+aws_iam_role_policy_attachment.ssm
+aws_instance.app
+aws_internet_gateway.main
+aws_route_table.public
+aws_route_table_association.public
+aws_security_group.app
+aws_subnet.public
+aws_vpc.main
+aws_vpc_security_group_egress_rule.all
+aws_vpc_security_group_ingress_rule.grafana
+aws_vpc_security_group_ingress_rule.http
+aws_vpc_security_group_ingress_rule.prometheus
+PS C:\Users\javie\Documents\devops-pin\mundose-courses-api\infra\envs\aws>
+PS C:\Users\javie\Documents\devops-pin\mundose-courses-api\infra\envs\aws>

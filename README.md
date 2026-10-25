@@ -69,7 +69,7 @@ Pull requests corren todo menos el push y el deploy. Los reportes (ESLint, Snyk,
 ```powershell
 vagrant up
 vagrant ssh -c "bash /vagrant/scripts/local-up.sh <sha>"
-# App http://localhost:8080 · Grafana http://localhost:3000 · Prometheus http://localhost:9090
+# App http://localhost:8081 · Grafana http://localhost:3000 · Prometheus http://localhost:9090
 ```
 
 **Rollback:** re-ejecutar el job `deploy` de un run anterior (vuelve a aplicar ese SHA).
@@ -87,7 +87,7 @@ k6 run -e BASE_URL=http://<ip-publica> load/k6.js
 
 - Contenedor sin root, sistema de archivos de solo lectura, `cap_drop: ALL`, `no-new-privileges`, sin npm en runtime.
 - Sin access keys de AWS en GitHub: OIDC acotado al environment `production` de este repo.
-- **Deuda:** sin HTTPS (requiere dominio + ALB/ACM); la password de Grafana viaja en el `user_data` y en el estado de Terraform (mejor: SSM Parameter Store); la base `node:22-alpine` se fija por digest en E1 (`docker buildx imagetools inspect node:22-alpine`) y Dependabot la mantiene.
+- **Deuda:** sin HTTPS (requiere dominio + ALB/ACM); la password de Grafana viaja en el `user_data` y en el estado de Terraform (mejor: SSM Parameter Store); la base `node:22-alpine` se fija por tag mayor y Dependabot la mantiene; fijarla por digest es el siguiente paso.
 
 ## Setup
 

@@ -1,0 +1,76 @@
+Run terraform apply -input=false tfplan
+aws_instance.app: Destroying... [id=i-0380334a53568b176]
+aws_instance.app: Still destroying... [id=i-0380334a53568b176, 00m10s elapsed]
+aws_instance.app: Still destroying... [id=i-0380334a53568b176, 00m20s elapsed]
+aws_instance.app: Still destroying... [id=i-0380334a53568b176, 00m30s elapsed]
+aws_instance.app: Still destroying... [id=i-0380334a53568b176, 00m40s elapsed]
+aws_instance.app: Destruction complete after 50s
+aws_iam_role.instance: Modifying... [id=mundose-instance]
+aws_vpc.main: Modifying... [id=vpc-08481fb8ae75aad37]
+aws_iam_role.instance: Modifications complete after 0s [id=mundose-instance]
+aws_iam_instance_profile.instance: Modifying... [id=mundose-instance]
+aws_vpc.main: Modifications complete after 1s [id=vpc-08481fb8ae75aad37]
+aws_internet_gateway.main: Modifying... [id=igw-05d500e6e9fbec5da]
+aws_default_security_group.default: Modifying... [id=sg-0045eb4dd96bc0c87]
+aws_subnet.public: Modifying... [id=subnet-06b2765dd6ea9187f]
+aws_security_group.app: Modifying... [id=sg-072895a79d8ccf9b1]
+aws_internet_gateway.main: Modifications complete after 0s [id=igw-05d500e6e9fbec5da]
+aws_route_table.public: Modifying... [id=rtb-0043058f605e1c686]
+aws_default_security_group.default: Modifications complete after 0s [id=sg-0045eb4dd96bc0c87]
+aws_subnet.public: Modifications complete after 0s [id=subnet-06b2765dd6ea9187f]
+aws_route_table.public: Modifications complete after 0s [id=rtb-0043058f605e1c686]
+aws_security_group.app: Modifications complete after 0s [id=sg-072895a79d8ccf9b1]
+aws_vpc_security_group_ingress_rule.prometheus: Modifying... [id=sgr-07d8c91ef2e6f6ec1]
+aws_vpc_security_group_egress_rule.all: Modifying... [id=sgr-0248ad18d6b36bfdf]
+aws_vpc_security_group_ingress_rule.http: Modifying... [id=sgr-08118de5222c61bae]
+aws_vpc_security_group_ingress_rule.grafana: Modifying... [id=sgr-05a1303e837df68be]
+aws_vpc_security_group_egress_rule.all: Modifications complete after 0s [id=sgr-0248ad18d6b36bfdf]
+aws_vpc_security_group_ingress_rule.http: Modifications complete after 0s [id=sgr-08118de5222c61bae]
+aws_vpc_security_group_ingress_rule.prometheus: Modifications complete after 0s [id=sgr-07d8c91ef2e6f6ec1]
+aws_vpc_security_group_ingress_rule.grafana: Modifications complete after 0s [id=sgr-05a1303e837df68be]
+aws_iam_instance_profile.instance: Modifications complete after 6s [id=mundose-instance]
+aws_instance.app: Creating...
+aws_instance.app: Still creating... [00m10s elapsed]
+aws_instance.app: Creation complete after 12s [id=i-0669caac896d4e7eb]
+aws_eip.app: Modifying... [id=eipalloc-0e5f602b46f29d228]
+aws_eip.app: Modifications complete after 2s [id=eipalloc-0e5f602b46f29d228]
+
+Apply complete! Resources: 1 added, 13 changed, 1 destroyed.
+
+Outputs:
+
+app_url = "http://34.226.5.17"
+deployed_image = "ghcr.io/javiervelaz/mundose-courses-api:48171eab069f5700a2cc2713938e554d96367247"
+grafana_url = "http://34.226.5.17:3000"
+instance_id = "i-0669caac896d4e7eb"
+prometheus_url = "http://34.226.5.17:9090"
+
+Resumen
+Run {
+  {
+    echo "### Deploy en AWS"
+    echo "| | |"
+    echo "|---|---|"
+    echo "| App | http://34.226.5.17 |"
+    echo "| Grafana | http://34.226.5.17:3000 (solo ADMIN_CIDR) |"
+    echo "| Commit | \`48171eab069f5700a2cc2713938e554d96367247\` |"
+    echo "| Imagen | \`ghcr.io/javiervelaz/mundose-courses-api@sha256:1e8db44146cf5d1c53c4477019a9ef7c72ea1b468a9d75f39e6b9ef38540d03d\` |"
+  } >> "$GITHUB_STEP_SUMMARY"
+  shell: /usr/bin/bash -e {0}
+  env:
+    NODE_VERSION: 22
+    TF_VERSION: 1.17.0
+    SNYK_VERSION: 1.1308.3
+    IMAGE_NAME: ghcr.io/javiervelaz/mundose-courses-api
+    IS_RELEASE: true
+    TF_IN_AUTOMATION: true
+    TF_VAR_image: ghcr.io/javiervelaz/mundose-courses-api
+    TF_VAR_image_tag: 48171eab069f5700a2cc2713938e554d96367247
+    TF_VAR_admin_cidr: 190.189.31.27/32
+    TF_VAR_aws_region: us-east-1
+    TF_VAR_grafana_admin_password: ***
+    AWS_DEFAULT_REGION: us-east-1
+    AWS_REGION: us-east-1
+    AWS_ACCESS_KEY_ID: ***
+    AWS_SECRET_ACCESS_KEY: ***
+    AWS_SESSION_TOKEN: ***
