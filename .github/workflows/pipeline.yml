@@ -139,7 +139,7 @@ jobs:
             --json-file-output=reports/snyk-iac.json \
             --sarif-file-output=reports/snyk-iac.sarif
 
-      - uses: github/codeql-action/upload-sarif@v4.39.1
+      - uses: github/codeql-action/upload-sarif@v4.39.3
         if: always() && hashFiles('reports/snyk-deps.sarif') != ''
         with:
           sarif_file: reports/snyk-deps.sarif
