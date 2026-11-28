@@ -220,7 +220,7 @@ jobs:
             --json-file-output=reports/snyk-container.json
 
       - name: SBOM CycloneDX (imagen)
-        uses: anchore/sbom-action@v0.24.3
+        uses: anchore/sbom-action@v0.24.4
         with:
           image: ${{ steps.ref.outputs.image }}:${{ github.sha }}
           format: cyclonedx-json
@@ -228,7 +228,7 @@ jobs:
           upload-artifact: false
 
       - name: SBOM SPDX (imagen)
-        uses: anchore/sbom-action@v0.24.3
+        uses: anchore/sbom-action@v0.24.4
         with:
           image: ${{ steps.ref.outputs.image }}:${{ github.sha }}
           format: spdx-json
